@@ -8,6 +8,7 @@ __pycache__/
 
 # Secrets
 secrets/
+artifacts/pickle file/
 
 # Distribution / packaging
 .Python
