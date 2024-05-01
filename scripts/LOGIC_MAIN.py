@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 import sys
 from src.logger import logging
 from src.exception import CustomException
@@ -10,15 +11,17 @@ from scripts.SHEET_SCRAMBLER import VALIDATE_AND_UPDATE
 from scripts.SCRAPER import format_scraping_time
 from datetime import datetime
 
+load_dotenv()
+
 today = str(datetime.today())
 CLIENT_SECRET_FILE = 'secrets/credentials.json'
-API_NAME = 'sheets'
-API_VERSION = 'v4'
-SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
+API_NAME = os.getenv('API_NAME')
+API_VERSION = os.getenv('API_VERSION')
+SCOPES = [os.getenv('SCOPES')]
 service = Create_Service(CLIENT_SECRET_FILE, API_NAME, API_VERSION, SCOPES)   
-CATALYST_SPREADSHEET_ID = '1sqQf7PtC5j4aMtYdKS4uD-ypmvuNGkP7TeQHtGENZcs'
-AUTOMATION_SPREADSHEET_ID = '120Ae4G5aBSP3mTXaSrIyqt0bC__lFRzgLFVdhHc6wN4'
-SLEEP_TIME = 0.3
+CATALYST_SPREADSHEET_ID = os.getenv('CATALYST_SPREADSHEET_ID')
+AUTOMATION_SPREADSHEET_ID = os.getenv('AUTOMATION_SPREADSHEET_ID')
+SLEEP_TIME = float(os.getenv('SLEEP_TIME'))
 
 
 def scrape_and_update(url, end_page_number):

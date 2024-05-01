@@ -6,3 +6,4 @@ google-auth-httplib2
 google-auth-oauthlib
 openpyxl
 tqdm
+python-dotenv
