@@ -4,8 +4,10 @@ import ssl
 import pandas as pd
 from bs4 import BeautifulSoup
 import time
+import os
 ssl._create_default_https_context = ssl._create_unverified_context
 
+SLEEP_TIME = float(os.getenv('SLEEP_TIME'))
 UNKNOWN = "Unknown"
 NA = "NA"
 NOT_AVAILABLE = "Not Available"
@@ -139,7 +141,7 @@ def prepare_scraped_tender_data(df):
     df.drop(columns=['Title', 'Location'], axis=1, inplace=True)
     return df
 
-def SCRAPE_WEBPAGE_TO_DF(url, end_page_number, SLEEP_TIME):
+def SCRAPE_WEBPAGE_TO_DF(url, end_page_number):
     start = time.time()
     df = pd.DataFrame()
     end_page_number = int(end_page_number)

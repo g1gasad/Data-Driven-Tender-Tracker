@@ -21,12 +21,11 @@ SCOPES = [os.getenv('SCOPES')]
 service = Create_Service(CLIENT_SECRET_FILE, API_NAME, API_VERSION, SCOPES)   
 CATALYST_SPREADSHEET_ID = os.getenv('CATALYST_SPREADSHEET_ID')
 AUTOMATION_SPREADSHEET_ID = os.getenv('AUTOMATION_SPREADSHEET_ID')
-SLEEP_TIME = float(os.getenv('SLEEP_TIME'))
 
 
 def scrape_and_update(url, end_page_number):
     try:
-        SCRAPED_DF, time_elapsed = SCRAPE_WEBPAGE_TO_DF(url, end_page_number, SLEEP_TIME)
+        SCRAPED_DF, time_elapsed = SCRAPE_WEBPAGE_TO_DF(url, end_page_number)
         print(format_scraping_time(time_elapsed))
         print(f"Scraped data shape: {SCRAPED_DF.shape}")
         logging.info("Scraping Done")
