@@ -1,7 +1,6 @@
 from scripts.LOGIC_MAIN import scrape_and_update
 
 def main():
-    number_of_links = input("Is there more than 1 URL?\nEnter 'Yes/No': ")
     url = input('Paste the copied Link Address of the Page:')
     end_page_number = input("Enter the number of pages you want:")
     scrape_and_update(url, end_page_number)   
