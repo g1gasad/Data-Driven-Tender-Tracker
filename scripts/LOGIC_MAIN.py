@@ -6,7 +6,7 @@ from src.exception import CustomException
 from scripts.GOOGLE import Create_Service
 from scripts.SCRAPER import SCRAPE_WEBPAGE_TO_DF
 from scripts.SHEET_SCRAMBLER import PUSH_DATA_TO_SHEET
-from scripts.SHEET_SCRAMBLER import FETCH_DATA
+from scripts.SHEET_SCRAMBLER import FETCH_OLD_DATA
 from scripts.SHEET_SCRAMBLER import VALIDATE_AND_UPDATE
 from scripts.SCRAPER import format_scraping_time
 from datetime import datetime
@@ -34,6 +34,7 @@ def scrape_and_update(url, end_page_number):
         scraped_filename = f"scraped {today.split()[0]} {current_time}, Rows {SCRAPED_DF.shape[0]}.xlsx"
         file_path = os.path.join('data/scraped', scraped_filename)
         SCRAPED_DF.to_excel(file_path, index=False)
+        
         logging.info('Converted the scraped data into excel')
         
     except Exception as e:
@@ -45,17 +46,18 @@ def scrape_and_update(url, end_page_number):
                             DATAFRAME=SCRAPED_DF, 
                             WORKSHEET_NAME_STRING="New")
 
-        old_df, new_df = FETCH_DATA(service, CATALYST_SPREADSHEET_ID, "Old", "New")
+        old_df = FETCH_OLD_DATA(service, CATALYST_SPREADSHEET_ID, "Old")
         pulled_file_path = os.path.join('data/pull', f"pulled {today.split()[0]} {current_time}.xlsx")
         old_df.to_excel(pulled_file_path, index=False)
         print(f"Old data shape: {old_df.shape}")
+        
         logging.info("Pulled old data as excel file")
         
     except Exception as e:
         raise CustomException(e, sys)
     
     try:
-        UPDATED_DF = VALIDATE_AND_UPDATE(OLD_DATAFRAME=old_df, NEW_DATAFRAME=new_df)
+        UPDATED_DF = VALIDATE_AND_UPDATE(OLD_DATAFRAME=old_df, SCRAPED_DATAFRAME=SCRAPED_DF)
         print('Updated data shape: ', UPDATED_DF.shape)
         print(UPDATED_DF['Updated'].value_counts().reset_index(drop=False))
 
@@ -64,10 +66,10 @@ def scrape_and_update(url, end_page_number):
         
         logging.info("Final data ready to push")
 
-    # PUSH_DATA_TO_SHEET(SERVICE=service,
-    #                     SPREADSHEET_ID=AUTOMATION_SPREADSHEET_ID, 
-    #                     DATAFRAME=UPDATED_DF, 
-    #                     WORKSHEET_NAME_STRING="DF")
+        PUSH_DATA_TO_SHEET(SERVICE=service,
+                            SPREADSHEET_ID=CATALYST_SPREADSHEET_ID, 
+                            DATAFRAME=UPDATED_DF, 
+                            WORKSHEET_NAME_STRING="Updated")
     except Exception as e:
         raise CustomException(e, sys)
     

@@ -4,7 +4,6 @@ import ssl
 import pandas as pd
 from bs4 import BeautifulSoup
 import time
-from datetime import datetime
 ssl._create_default_https_context = ssl._create_unverified_context
 
 UNKNOWN = "Unknown"
@@ -149,6 +148,7 @@ def SCRAPE_WEBPAGE_TO_DF(url, end_page_number, SLEEP_TIME):
     for link in tqdm (generate_tender_page_urls(url, end_page_number), ncols=100, colour="#30d18b"):
         response = requests.get(link)
         soup = BeautifulSoup(response.content, 'html.parser')
+        time.sleep(SLEEP_TIME+0.7)
         tab_containers = soup.find_all('div', class_='block card clearfix')
         tab_links.extend(tab_containers)
         time.sleep(SLEEP_TIME)
@@ -157,9 +157,9 @@ def SCRAPE_WEBPAGE_TO_DF(url, end_page_number, SLEEP_TIME):
                                  if (parse_tender_tab_information(tab), time.sleep(SLEEP_TIME))]
     data = pd.DataFrame(data_list)
     df = prepare_scraped_tender_data(data)
-    desired_cols = ['Description', 'Authority', 'Stage', 'Contract Date', 'Contract Amount',
-                    'City', 'URL', 'Tender_ID', 'State', 'Categories', 'numeric_amount']
-    df = df[desired_cols]
+    column_order = ['Description', 'Authority', 'Stage', 'Contract Date', 'Contract Amount',
+                    'City', 'URL', 'Tender_ID', 'numeric_amount', 'State', 'Categories']
+    df = df[column_order]
     df = standardize_tender_data(df)
     end = time.time()
     time_elapsed = round(end - start)

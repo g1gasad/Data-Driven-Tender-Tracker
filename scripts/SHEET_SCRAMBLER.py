@@ -21,7 +21,15 @@ def PUSH_DATA_TO_SHEET(SERVICE, SPREADSHEET_ID, DATAFRAME, WORKSHEET_NAME_STRING
                         body=value_range_body
                     ).execute()
 
-def FETCH_DATA(SERVICE, SPREADSHEET_ID, OLD_SHEET_STRING, NEW_SHEET_STRING):
+def FETCH_OLD_DATA(SERVICE, SPREADSHEET_ID, OLD_SHEET_STRING):
+    old = SERVICE.spreadsheets().values().get(
+                    spreadsheetId=SPREADSHEET_ID,
+                    range=OLD_SHEET_STRING,
+                ).execute()
+    old_df = pd.DataFrame(old['values'][1:], columns=old['values'][0])
+    return old_df
+
+def FETCH_BOTH_DATA(SERVICE, SPREADSHEET_ID, OLD_SHEET_STRING, NEW_SHEET_STRING):
     mySpreadsheets = SERVICE.spreadsheets().get(spreadsheetId=SPREADSHEET_ID).execute()
     old = SERVICE.spreadsheets().values().get(
                     spreadsheetId=SPREADSHEET_ID,
@@ -35,20 +43,22 @@ def FETCH_DATA(SERVICE, SPREADSHEET_ID, OLD_SHEET_STRING, NEW_SHEET_STRING):
     new_df = pd.DataFrame(new['values'][1:], columns=new['values'][0])
     return old_df, new_df
 
-def VALIDATE_AND_UPDATE(OLD_DATAFRAME, NEW_DATAFRAME):
+def VALIDATE_AND_UPDATE(OLD_DATAFRAME, SCRAPED_DATAFRAME):
     stage_update_map = {"New!":1, "Yes":2, "No":3}
-    merged_df = OLD_DATAFRAME.merge(NEW_DATAFRAME[['Tender_ID', 'Stage']],
+    merged_df = OLD_DATAFRAME.merge(SCRAPED_DATAFRAME[['Tender_ID', 'Stage']],
                                      on='Tender_ID', suffixes=('', '_new'))
     indices_to_update = merged_df[merged_df['Stage'] != merged_df['Stage_new']].index
     OLD_DATAFRAME.loc[indices_to_update, 'Stage'] = merged_df.loc[indices_to_update, 'Stage_new']
     OLD_DATAFRAME['Updated'] = "No"
     OLD_DATAFRAME.loc[indices_to_update, 'Updated'] = "Yes"
-    newly_added_list = list(set(NEW_DATAFRAME['Tender_ID']) - set(OLD_DATAFRAME['Tender_ID']))
-    to_add = NEW_DATAFRAME[NEW_DATAFRAME['Tender_ID'].isin(newly_added_list)].reset_index(drop=True)
-    to_add['Updated'] = "New!"
-    updated_df = pd.concat([to_add, OLD_DATAFRAME], ignore_index=True)
+    newly_added_list = list(set(SCRAPED_DATAFRAME['Tender_ID']) - set(OLD_DATAFRAME['Tender_ID']))
+    data_to_add = SCRAPED_DATAFRAME[SCRAPED_DATAFRAME['Tender_ID'].isin(newly_added_list)].reset_index(drop=True)
+    data_to_add['Updated'] = "New!"
+    updated_df = pd.concat([data_to_add, OLD_DATAFRAME], ignore_index=True)
     updated_df['stage_update_mapper'] = updated_df['Updated'].map(stage_update_map)
     updated_df = updated_df.sort_values(by="stage_update_mapper").drop("stage_update_mapper", axis=1)
-    return updated_df
+    column_order = ['Description', 'Authority', 'Stage', 'Contract Date', 'Contract Amount',
+                    'City', 'URL', 'Tender_ID', 'numeric_amount', 'Updated', 'State', 'Categories']
+    return updated_df[column_order]
 
 
