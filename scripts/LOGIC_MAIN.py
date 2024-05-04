@@ -8,7 +8,7 @@ from scripts.SCRAPER import SCRAPE_WEBPAGE_TO_DF
 from scripts.SHEET_SCRAMBLER import PUSH_DATA_TO_SHEET
 from scripts.SHEET_SCRAMBLER import FETCH_OLD_DATA
 from scripts.SHEET_SCRAMBLER import VALIDATE_AND_UPDATE
-from scripts.SCRAPER import format_scraping_time
+# from scripts.SCRAPER import format_scraping_time
 from datetime import datetime
 
 load_dotenv()
@@ -25,9 +25,10 @@ AUTOMATION_SPREADSHEET_ID = os.getenv('AUTOMATION_SPREADSHEET_ID')
 
 def scrape_and_update(url, end_page_number):
     try:
-        SCRAPED_DF, time_elapsed = SCRAPE_WEBPAGE_TO_DF(url, end_page_number)
-        print(format_scraping_time(time_elapsed))
+        SCRAPED_DF, _ = SCRAPE_WEBPAGE_TO_DF(url, end_page_number)
+        # print(format_scraping_time(time_elapsed))
         print(f"Scraped data shape: {SCRAPED_DF.shape}")
+        
         logging.info("Scraping Done")
         current_time = datetime.now().hour, datetime.now().minute
         scraped_filename = f"scraped {today.split()[0]} {current_time}, Rows {SCRAPED_DF.shape[0]}.xlsx"
