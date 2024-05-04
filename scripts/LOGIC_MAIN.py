@@ -34,9 +34,9 @@ def scrape_and_update(params_list):
             logging.info("Finished scraping data from first URL")
             
         else:
+            print()
             try:
                 NEXT_SCRAPED_DF, _ = SCRAPE_WEBPAGE_TO_DF(url, end_page_number)
-                print(f"scraped link {i}")
                 SCRAPED_DF = pd.concat([SCRAPED_DF, NEXT_SCRAPED_DF], axis=0, ignore_index=True)
             except Exception as e:
                 raise CustomException(e, sys)
@@ -79,9 +79,12 @@ def scrape_and_update(params_list):
     
     try:
         UPDATED_DF = VALIDATE_AND_UPDATE(OLD_DATAFRAME=old_df, SCRAPED_DATAFRAME=SCRAPED_DF)
-        print('Updated data shape: ', UPDATED_DF.shape)
-        print(UPDATED_DF['Updated'].value_counts().reset_index(drop=False))
+        print('Updated data shape:', UPDATED_DF.shape)
+        updated_data_stats = UPDATED_DF['Updated'].value_counts().reset_index(drop=False)
+        print(updated_data_stats)
 
+        logging.info(f"{updated_data_stats}")
+        
         updated_file_path = os.path.join('data/push', 
                                          f"updated {today.split()[0]} {current_time}, Rows {UPDATED_DF.shape[0]}.xlsx")
         UPDATED_DF.to_excel(updated_file_path, index=False)
