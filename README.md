@@ -1,6 +1,6 @@
 ## Data-Driven Tender Tracker
 
-This Python application is designed to streamline the process of collecting and organizing Indian tender data. With Data-Driven Tender Tracker, you can simply provide a URL, and the application will scrape the relevant data and push it directly to a Google Sheet.
+This Python application is designed to streamline collecting and organizing Indian tender data. With Data-Driven Tender Tracker, you can provide a URL, and the application will scrape the relevant data and push it directly to a Google Sheet.
 
 Key Features
 
