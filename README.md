@@ -4,8 +4,8 @@ This Python application is designed to streamline collecting and organizing Indi
 
 <br/>
 <p align="center">
-<a href="https://www.youtube.com/watch?v=gyMwXuJrbJQ" target="_blank">
-<img src="./static/images/Interactive Dashboard.png" width="500" alt="Solidity, Blockchain, and Smart Contract Course – Beginner to Expert Javascript Tutorial">
+<a href="https://www.linkedin.com/in/asad-21042001-ahsan/" target="_blank">
+<img src="./static/images/Interactive Dashboard.png" width="600" height="300" alt="Simple and Intuitive Dashboard for Tender lead Storage and Access">
 </a>
 </p>
 <br/>
