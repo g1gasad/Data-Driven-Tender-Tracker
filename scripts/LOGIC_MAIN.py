@@ -25,6 +25,7 @@ AUTOMATION_SPREADSHEET_ID = os.getenv('AUTOMATION_SPREADSHEET_ID')
 
 
 def scrape_and_update(params_list):
+    logging.info("Starting scraping")
     for i, (url, end_page_number) in enumerate(params_list):
         if i == 0:
             try:
@@ -43,7 +44,6 @@ def scrape_and_update(params_list):
             
             logging.info("Finished scraping and concatenating NEXT data from URL")
     logging.info("Scraping Done")
-    # print(format_scraping_time(time_elapsed))
     print(f"Scraped data shape: {SCRAPED_DF.shape}")
     
     current_time = datetime.now().hour, datetime.now().minute

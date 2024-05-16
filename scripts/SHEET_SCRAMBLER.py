@@ -1,6 +1,7 @@
 import pandas as pd
 
 def PUSH_DATA_TO_SHEET(SERVICE, SPREADSHEET_ID, DATAFRAME, WORKSHEET_NAME_STRING):
+    """This function pushes data to a google sheet"""
     worksheet_name = WORKSHEET_NAME_STRING + "!"
     cell_range_insert = 'A1'
     columns = list(DATAFRAME.columns)
@@ -22,6 +23,7 @@ def PUSH_DATA_TO_SHEET(SERVICE, SPREADSHEET_ID, DATAFRAME, WORKSHEET_NAME_STRING
                     ).execute()
 
 def FETCH_OLD_DATA(SERVICE, SPREADSHEET_ID, OLD_SHEET_STRING):
+    """This function fetches data from a google sheet"""
     old = SERVICE.spreadsheets().values().get(
                     spreadsheetId=SPREADSHEET_ID,
                     range=OLD_SHEET_STRING,
@@ -30,7 +32,6 @@ def FETCH_OLD_DATA(SERVICE, SPREADSHEET_ID, OLD_SHEET_STRING):
     return old_df
 
 def FETCH_BOTH_DATA(SERVICE, SPREADSHEET_ID, OLD_SHEET_STRING, NEW_SHEET_STRING):
-    mySpreadsheets = SERVICE.spreadsheets().get(spreadsheetId=SPREADSHEET_ID).execute()
     old = SERVICE.spreadsheets().values().get(
                     spreadsheetId=SPREADSHEET_ID,
                     range=OLD_SHEET_STRING,

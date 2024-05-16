@@ -11,7 +11,7 @@ data/
 
 # Secrets
 secrets/
-pickle file/
+artifacts/
 
 # Distribution / packaging
 .Python

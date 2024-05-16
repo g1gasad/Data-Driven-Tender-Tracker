@@ -30,6 +30,9 @@ def convert_contract_amount_to_numeric(x):
         return -99999
 
 def standardize_tender_data(df):
+    """
+    This function standardizes the data in the dataframe.
+    """
     def column_with_dash(column_string):
         return list(df.loc[df[column_string].str.contains("-")].index)
         
@@ -61,6 +64,9 @@ def standardize_tender_data(df):
     return df
     
 def format_scraping_time(x):
+    """
+    This function formats the scraping time.
+    """
     minute = x // 60
     second = x % 60
     if second == 0 or second == 1:
@@ -82,6 +88,9 @@ def generate_tender_page_urls(url, end_page_number):
         return [url.replace("1", str(i), 1) for i in range(1, end_page_number + 1)]
 
 def parse_tender_tab_information(tab):
+    """
+    This function parses the tender tab information.
+    """
     try:
         link = tab.find('a')
         if link:
@@ -142,6 +151,9 @@ def prepare_scraped_tender_data(df):
     return df
 
 def SCRAPE_WEBPAGE_TO_DF(url, end_page_number):
+    """
+    This function scrapes the webpage to a dataframe.
+    """
     start = time.time()
     df = pd.DataFrame()
     end_page_number = int(end_page_number)
