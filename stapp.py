@@ -14,7 +14,7 @@ def main():
         input_end_page_number = st.number_input(f"Enter number of pages you want for Link {i+1}:", min_value=1, step=1)
         params_list.append((input_url, input_end_page_number))
 
-    if st.button('Scrape Data'):
+    if st.button('Start Scraping'):
         logging.info(f"Scraping initiated for {params_list}")
         scrape_and_update(params_list)
         st.success("Scraping completed successfully!")
