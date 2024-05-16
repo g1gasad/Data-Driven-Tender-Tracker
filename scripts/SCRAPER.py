@@ -167,8 +167,15 @@ def SCRAPE_WEBPAGE_TO_DF(url, end_page_number):
         tab_links.extend(tab_containers)
         time.sleep(SLEEP_TIME)
         
-    data_list = [parse_tender_tab_information(tab) for tab in tqdm (tab_links, ncols=100, colour="#ffbe8e")
-                                 if (parse_tender_tab_information(tab), time.sleep(SLEEP_TIME))]
+    # data_list = [parse_tender_tab_information(tab) for tab in tqdm (tab_links, ncols=100, colour="#ffbe8e")
+    #                              if (parse_tender_tab_information(tab), time.sleep(SLEEP_TIME))]
+    
+    data_list = []
+    for tab in tqdm(tab_links, ncols=100, colour="#ffbe8e"):
+        data = parse_tender_tab_information(tab)
+        time.sleep(SLEEP_TIME)
+        data_list.append(data)
+        
     data = pd.DataFrame(data_list)
     df = prepare_scraped_tender_data(data)
     column_order = ['Description', 'Authority', 'Stage', 'Contract Date', 'Contract Amount',

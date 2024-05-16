@@ -47,11 +47,11 @@ def scrape_and_update(params_list):
     print(f"Scraped data shape: {SCRAPED_DF.shape}")
     
     current_time = datetime.now().hour, datetime.now().minute
-    scraped_filename = f"scraped {today.split()[0]} {current_time}, Rows {SCRAPED_DF.shape[0]}.xlsx"
+    scraped_filename = f"scraped {today.split()[0]} {current_time}, Rows {SCRAPED_DF.shape[0]}.csv"
     file_path = os.path.join('data/scraped', scraped_filename)
     
     try:
-        SCRAPED_DF.to_excel(file_path, index=False)
+        SCRAPED_DF.to_csv(file_path, index=False)
     except Exception as e:
         raise CustomException(e, sys)
     
@@ -68,8 +68,8 @@ def scrape_and_update(params_list):
     try:
         old_df = FETCH_OLD_DATA(service, CATALYST_SPREADSHEET_ID, "Old")
         pulled_file_path = os.path.join('data/pull',
-                                        f"pulled {today.split()[0]} {current_time}, Rows {old_df.shape[0]}.xlsx")
-        old_df.to_excel(pulled_file_path, index=False)
+                                        f"pulled {today.split()[0]} {current_time}, Rows {old_df.shape[0]}.csv")
+        old_df.to_csv(pulled_file_path, index=False)
         print(f"Old data shape: {old_df.shape}")
         
         logging.info("Pulled old data as excel file")
@@ -86,8 +86,8 @@ def scrape_and_update(params_list):
         logging.info(f"{updated_data_stats}")
         
         updated_file_path = os.path.join('data/push', 
-                                         f"updated {today.split()[0]} {current_time}, Rows {UPDATED_DF.shape[0]}.xlsx")
-        UPDATED_DF.to_excel(updated_file_path, index=False)
+                                         f"updated {today.split()[0]} {current_time}, Rows {UPDATED_DF.shape[0]}.csv")
+        UPDATED_DF.to_csv(updated_file_path, index=False)
         
         logging.info("Final data ready to push")
 
