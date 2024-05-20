@@ -45,7 +45,7 @@ def standardize_tender_data(df):
 
     for i in indices_with_dash:
         state_in_city_col = df.iloc[i, 5].split(' - ')[-1].strip()
-        state_in_state_col = df.iloc[i, 8].split(' - ')[-1].strip()
+        state_in_state_col = df.iloc[i, 9].split(' - ')[-1].strip()
         if state_in_city_col == state_in_state_col:
             state = state_in_city_col
             df.at[i, "City"] = 'Multi-City'
