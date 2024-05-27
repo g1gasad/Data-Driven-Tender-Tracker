@@ -1,4 +1,3 @@
-from tqdm import tqdm
 from stqdm import stqdm
 import requests
 import ssl
@@ -161,7 +160,7 @@ def SCRAPE_WEBPAGE_TO_DF(url, end_page_number):
 
     tab_links = []
     for link in stqdm (generate_tender_page_urls(url, end_page_number),
-                       ncols=100, colour="#30d18b", frontend=True, backend=True):
+                       ncols=100, colour="#30d18b", frontend=False, backend=True):
         response = requests.get(link)
         soup = BeautifulSoup(response.content, 'html.parser')
         time.sleep(SLEEP_TIME+0.7)

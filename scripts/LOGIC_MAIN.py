@@ -44,7 +44,8 @@ def scrape_and_update(params_list):
             
             logging.info("Finished scraping and concatenating NEXT data from URL")
     logging.info("Scraping Done")
-    print(f"Scraped data shape: {SCRAPED_DF.shape}")
+    scraped_data_shape = SCRAPED_DF.shape
+    print(f"Scraped data shape: {scraped_data_shape}")
     
     current_time = datetime.now().hour, datetime.now().minute
     scraped_filename = f"scraped {today.split()[0]} {current_time}, Rows {SCRAPED_DF.shape[0]}.csv"
@@ -70,7 +71,8 @@ def scrape_and_update(params_list):
         pulled_file_path = os.path.join('data/pull',
                                         f"pulled {today.split()[0]} {current_time}, Rows {old_df.shape[0]}.csv")
         old_df.to_csv(pulled_file_path, index=False)
-        print(f"Old data shape: {old_df.shape}")
+        old_data_shape = old_df.shape
+        print(f"Old data shape: {old_data_shape}")
         
         logging.info("Pulled old data as excel file")
         
@@ -79,8 +81,9 @@ def scrape_and_update(params_list):
     
     try:
         UPDATED_DF = VALIDATE_AND_UPDATE(OLD_DATAFRAME=old_df, SCRAPED_DATAFRAME=SCRAPED_DF)
-        print('Updated data shape:', UPDATED_DF.shape)
-        updated_data_stats = UPDATED_DF['Updated'].value_counts().reset_index(drop=False)
+        updated_data_shape = UPDATED_DF.shape
+        print('Updated data shape:', updated_data_shape)
+        updated_data_stats = UPDATED_DF['Updated'].value_counts().to_dict()
         print(updated_data_stats)
 
         logging.info(f"{updated_data_stats}")
@@ -97,4 +100,6 @@ def scrape_and_update(params_list):
                             WORKSHEET_NAME_STRING="Updated")
     except Exception as e:
         raise CustomException(e, sys)
+    
+    return scraped_data_shape, old_data_shape, updated_data_shape, updated_data_stats
     

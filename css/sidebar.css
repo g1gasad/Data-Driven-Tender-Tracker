@@ -1,0 +1,9 @@
+/* Example of responsive sidebar width */
+@media (max-width: 768px) {
+    .css-1d391kg.e1fqkh3o3 {
+        width: 50% !important;
+    }
+    .css-18e3th9.etr89bj1 {
+        margin-left: 50% !important;
+    }
+}
