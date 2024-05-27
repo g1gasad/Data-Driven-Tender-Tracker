@@ -5,7 +5,7 @@ from google_auth_oauthlib.flow import Flow, InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload
 from google.auth.transport.requests import Request
-
+from google.auth.exceptions import RefreshError
 
 def Create_Service(client_secret_file, api_name, api_version, *scopes):
   """
@@ -41,6 +41,7 @@ def Create_Service(client_secret_file, api_name, api_version, *scopes):
     if cred and cred.expired and cred.refresh_token:
       print('Refreshing expired token...')
       cred.refresh(Request())
+
     else:
       print('Obtaining new credentials...')
       flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRET_FILE, SCOPES)
