@@ -8,4 +8,5 @@ openpyxl
 tqdm
 python-dotenv
 streamlit
+stqdm
 # flask

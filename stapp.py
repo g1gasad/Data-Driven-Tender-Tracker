@@ -1,7 +1,9 @@
 import sys
 import streamlit as st
+from stqdm import stqdm
 from scripts.LOGIC_MAIN import scrape_and_update
 from src.logger import logging
+import time
 
 def main():
     st.title('Tender Data Scraping Application')
@@ -16,7 +18,15 @@ def main():
 
     if st.button('Start Scraping'):
         logging.info(f"Scraping initiated for {params_list}")
+
+        # Create a progress bar
+        # progress_bar = st.progress(0)
+        # for i in stqdm(range(100), backend=True, frontend=True):
+        #     time.sleep(0.01)
+
+        # Call the scrape_and_update function with progress bar updates
         scrape_and_update(params_list)
+
         st.success("Scraping completed successfully!")
         
         

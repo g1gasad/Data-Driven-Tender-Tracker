@@ -1,4 +1,5 @@
 from tqdm import tqdm
+from stqdm import stqdm
 import requests
 import ssl
 import pandas as pd
@@ -159,7 +160,8 @@ def SCRAPE_WEBPAGE_TO_DF(url, end_page_number):
     end_page_number = int(end_page_number)
 
     tab_links = []
-    for link in tqdm (generate_tender_page_urls(url, end_page_number), ncols=100, colour="#30d18b"):
+    for link in stqdm (generate_tender_page_urls(url, end_page_number),
+                       ncols=100, colour="#30d18b", frontend=True, backend=True):
         response = requests.get(link)
         soup = BeautifulSoup(response.content, 'html.parser')
         time.sleep(SLEEP_TIME+0.7)
@@ -171,7 +173,8 @@ def SCRAPE_WEBPAGE_TO_DF(url, end_page_number):
     #                              if (parse_tender_tab_information(tab), time.sleep(SLEEP_TIME))]
     
     data_list = []
-    for tab in tqdm(tab_links, ncols=100, colour="#ffbe8e"):
+    for tab in stqdm(tab_links, ncols=100, colour="#ffbe8e",
+                     backend=True, frontend=True):
         data = parse_tender_tab_information(tab)
         time.sleep(SLEEP_TIME)
         data_list.append(data)

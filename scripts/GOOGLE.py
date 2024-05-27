@@ -29,12 +29,11 @@ def Create_Service(client_secret_file, api_name, api_version, *scopes):
   # Define pickle file path
   pickle_file = f'artifacts/service_token/token_{API_SERVICE_NAME}_{API_VERSION}.pickle'
 
-  try:
-    # Try to load credentials from pickle file
-    with open(pickle_file, 'rb') as token:
-      cred = pickle.load(token)
-  except (OSError, pickle.UnpicklingError):
-    cred = None
+  cred = None
+
+  if os.path.exists(pickle_file):
+      with open(pickle_file, 'rb') as token:
+          cred = pickle.load(token)
 
   # Check and refresh credentials if necessary
   if not cred or not cred.valid:
@@ -47,9 +46,9 @@ def Create_Service(client_secret_file, api_name, api_version, *scopes):
       flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRET_FILE, SCOPES)
       cred = flow.run_local_server()  # Might require user interaction
 
-  # Save refreshed or newly obtained credentials
-  with open(pickle_file, 'wb') as token:
-    pickle.dump(cred, token)
+    # Save refreshed or newly obtained credentials
+    with open(pickle_file, 'wb') as token:
+      pickle.dump(cred, token)
 
   try:
     # Build the service object using the credentials
